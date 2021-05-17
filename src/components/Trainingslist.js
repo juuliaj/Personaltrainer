@@ -4,6 +4,10 @@ import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-material.css';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
+import AddTraining from './AddTraining';
+import Customerlist from './Customerlist';
+import moment from 'moment';
+
 
 function Trainingslist() {
 
@@ -14,17 +18,15 @@ function Trainingslist() {
     }, []);
 
     const fetchTrainings = () => {
-        fetch('https://customerrest.herokuapp.com/api/trainings')
+        fetch('https://customerrest.herokuapp.com/gettrainings')
         .then(response => response.json())
-        .then(data => setTrainings(data.content))
+        .then(data => setTrainings(data))
         .catch(err => console.error(err))
     }
 
-    const deleteTrainings = (url) => {
-        console.log(url)
+    const deleteTrainings = (id) => {
         if(window.confirm('Are you sure?')) {
-            console.log(url)
-        fetch(url, { method: 'DELETE' })
+        fetch(`https://customerrest.herokuapp.com/api/trainings/${id}`, { method: 'DELETE' })
         .then(response => {
             if(response.ok) {
                 fetchTrainings();
@@ -38,12 +40,17 @@ function Trainingslist() {
 }
 
     const columns = [
-        { field: 'date', sortable: true, filter: true },
+        { field: 'date', sortable: true, filter: true,
+        valueFormatter: function (params) {
+            return moment (params.value).format ('DD-MM-YYYY');
+        } },
         { field: 'duration', sortable: true, filter: true },
         { field: 'activity', sortable: true, filter: true },
+        { field: 'customer.firstname', sortable: true, filter: true },
+        { field: 'customer.lastname', sortable: true, filter: true },
         { 
             headerName: '',
-            field:  'links.0.href',
+            field:  'id',
             width: 100,
             cellRendererFramework: params => <IconButton color="secondary" 
             onClick={() => deleteTrainings(params.value)}><DeleteIcon /></IconButton>

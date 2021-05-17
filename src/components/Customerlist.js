@@ -5,16 +5,42 @@ import 'ag-grid-community/dist/styles/ag-theme-material.css';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
 import AddCustomer from './AddCustomer';
+import EditCustomer from './EditCustomer';
+import Snackbar from '@material-ui/core/Snackbar';
+import AddTraining from './AddTraining';
+import Button from '@material-ui/core/Button';
+import Trainingslist from './Trainingslist';
 
 
 function Customerlist() {
 
     const [customers, setCustomers] = useState([]);
+    const [open, setOpen] = useState(false);
 
     useEffect(() => {
         fetchCustomers();
     }, []);
 
+    const [trainings, setTrainings] = useState([]);
+
+    useEffect(() => {
+        fetchTrainings();
+    }, []);
+
+    const fetchTrainings = () => {
+        fetch('https://customerrest.herokuapp.com/api/trainings')
+        .then(response => response.json())
+        .then(data => setTrainings(data.content))
+        .catch(err => console.error(err))
+    }
+
+    const openSnackBar = () => {
+        setOpen(true);
+    }
+
+    const closeSnackBar = () => {
+        setOpen(false);
+    }
 
     const fetchCustomers = () => {
         fetch('https://customerrest.herokuapp.com/api/customers')
@@ -31,6 +57,7 @@ function Customerlist() {
         .then(response => {
             if(response.ok) {
                 fetchCustomers();
+                openSnackBar();
             }
             else {
                 alert('Something went wrong');
@@ -52,6 +79,29 @@ function Customerlist() {
     
     }
 
+    const updateCustomer = (url, updatedCustomer) => {
+        fetch(url, {
+            method: 'PUT',
+            body: JSON.stringify(updatedCustomer),
+            headers: { 'Content-type' : 'application/json' }
+        })
+        .then(_  => fetchCustomers())
+        .catch(err => console.error(err))
+    }
+
+    const addTraining = newTraining => {
+        fetch('https://customerrest.herokuapp.com/api/trainings',
+        {
+            method: 'POST',
+            body: JSON.stringify(newTraining),
+            headers: { 'Content-type' : 'application/json' }
+        })
+        .then(response => fetchTrainings())
+        .catch(err => console.error(err))
+
+    }
+
+
     const columns = [
         { field: 'firstname', sortable: true, filter: true },
         { field: 'lastname', sortable: true, filter: true },
@@ -62,10 +112,22 @@ function Customerlist() {
         { field: 'phone', sortable: true, filter: true },
         { 
             headerName: '',
+            field: 'links.0.href',
+            width: 100,
+            cellRendererFramework: params => <EditCustomer link={params.value} customer={params.data} updateCustomer={updateCustomer}/>
+        },
+        { 
+            headerName: '',
             field:  'links.0.href',
             width: 100,
             cellRendererFramework: params => <IconButton color="secondary" 
             onClick={() => deleteCustomer(params.value)}><DeleteIcon /></IconButton>
+        },
+        { 
+            headerName: '',
+            field:  'links.0.href',
+            width: 100,
+            cellRendererFramework: params => <AddTraining link={params.value} training={params.data} addTraining={addTraining} />
         }
     ]
 
@@ -82,6 +144,13 @@ return(
                         suppressCellSelection={true}
                     />
         </div>
+        <Snackbar 
+                    open={open}
+                    message="Customer deleted"
+                    autoHideDuration={3000}
+                    onClose={closeSnackBar}
+
+                />
     </div>
 
     )

@@ -18,9 +18,11 @@ function App() {
         <Tabs value={value} onChange={handleChange}>
           <Tab value="one" label="Customers" />
            <Tab value="two" label="Trainings" />
-          </Tabs>
-        {value === 'one' && <Customerlist />}
-      {value === 'two' && <Trainingslist />}     
+            <Tab value="three" label="Calendar" />
+            </Tabs>
+          {value === 'one' && <Customerlist />}
+        {value === 'two' && <Trainingslist />}    
+      {value === 'three' && <p>Calendar</p> }   
     </div>
   );
 }
