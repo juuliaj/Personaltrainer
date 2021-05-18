@@ -4,8 +4,6 @@ import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-material.css';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
-import AddTraining from './AddTraining';
-import Customerlist from './Customerlist';
 import moment from 'moment';
 import Snackbar from '@material-ui/core/Snackbar';
 

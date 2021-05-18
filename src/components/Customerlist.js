@@ -8,8 +8,6 @@ import AddCustomer from './AddCustomer';
 import EditCustomer from './EditCustomer';
 import Snackbar from '@material-ui/core/Snackbar';
 import AddTraining from './AddTraining';
-import Button from '@material-ui/core/Button';
-import Trainingslist from './Trainingslist';
 
 
 function Customerlist() {
