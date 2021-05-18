@@ -7,15 +7,28 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import AddTraining from './AddTraining';
 import Customerlist from './Customerlist';
 import moment from 'moment';
+import Snackbar from '@material-ui/core/Snackbar';
+
 
 
 function Trainingslist() {
 
     const [trainings, setTrainings] = useState([]);
+    const [msg, setMsg] = useState('');
+    const [open, setOpen] = useState(false);
+
 
     useEffect(() => {
         fetchTrainings();
     }, []);
+
+    const openSnackBar = () => {
+        setOpen(true);
+    }
+
+    const closeSnackBar = () => {
+        setOpen(false);
+    }
 
     const fetchTrainings = () => {
         fetch('https://customerrest.herokuapp.com/gettrainings')
@@ -30,6 +43,8 @@ function Trainingslist() {
         .then(response => {
             if(response.ok) {
                 fetchTrainings();
+                setMsg('Training deleted');
+                   openSnackBar();
             }
             else {
                 alert('Something went wrong');
@@ -42,7 +57,7 @@ function Trainingslist() {
     const columns = [
         { field: 'date', sortable: true, filter: true,
         valueFormatter: function (params) {
-            return moment (params.value).format ('DD-MM-YYYY');
+            return moment (params.value).format ('DD-MM-YYYY, hh:mm a');
         } },
         { field: 'duration', sortable: true, filter: true },
         { field: 'activity', sortable: true, filter: true },
@@ -69,6 +84,12 @@ return(
                         suppressCellSelection={true}
                     />
         </div>
+        <Snackbar
+                open={open}
+                message={msg}
+                autoHideDuration={3000}
+                onClose={closeSnackBar}
+            />
     </div>
 
     )
