@@ -4,6 +4,7 @@ import Customerlist from './components/Customerlist';
 import Trainingslist from './components/Trainingslist';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
+import TrainingCalendar from './components/TrainingCalendar'
 
 function App() {
 
@@ -22,7 +23,7 @@ function App() {
             </Tabs>
           {value === 'one' && <Customerlist />}
         {value === 'two' && <Trainingslist />}    
-      {value === 'three' && <p>Calendar</p> }   
+      {value === 'three' && <TrainingCalendar /> }   
     </div>
   );
 }

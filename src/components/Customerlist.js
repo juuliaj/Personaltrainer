@@ -126,7 +126,7 @@ function Customerlist() {
         { 
             headerName: '',
             field:  'links.0.href',
-            width: 100,
+            width: 200,
             cellRendererFramework: params => <AddTraining link={params.value} training={params.data} addTraining={addTraining} />
         }
     ]

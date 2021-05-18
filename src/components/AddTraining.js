@@ -37,7 +37,6 @@ function AddTraining(props) {
 
   const handleDateChange = (date) => {
       setTraining({...training, date: date.toISOString() })
-      console.log(date.toISOString())
   }
 
   return (
